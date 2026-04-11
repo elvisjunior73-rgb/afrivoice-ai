@@ -15,12 +15,61 @@
             "description": "Chaîne YouTube officielle de Top Congo FM"
         },
         {
-            "id": "radio_okapi_stream",
+            "id": "youtube_rtnc",
+            "type": "youtube",
+            "url": "https://www.youtube.com/@rtnc",
+            "actif": true,
+            "description": "Chaîne YouTube officielle de la RTNC (Télévision Nationale Congolaise)"
+        },
+        {
+            "id": "youtube_antenne_a",
+            "type": "youtube",
+            "url": "https://www.youtube.com/@AntenneATV",
+            "actif": true,
+            "description": "Chaîne YouTube de Antenne A Télévision (Journaux en Lingala)"
+        },
+        {
+            "id": "youtube_congo_web_tv",
+            "type": "youtube",
+            "url": "https://www.youtube.com/@CONGOWEBTV-LIVE",
+            "actif": true,
+            "description": "Chaîne YouTube de Congo Web TV"
+        },
+        {
+            "id": "youtube_lingala_news",
+            "type": "youtube",
+            "url": "https://www.youtube.com/channel/UCMu0gVPyF4nWWBL-AV-DJrw",
+            "actif": true,
+            "description": "Chaîne YouTube Lingala News"
+        },
+        {
+            "id": "youtube_congotalks243",
+            "type": "youtube",
+            "url": "https://www.youtube.com/c/CongoTalks243",
+            "actif": true,
+            "description": "Chaîne YouTube CongoTalks243 (Culture et langue)"
+        },
+        {
+            "id": "tiktok_lingala_tag",
+            "type": "youtube",
+            "url": "https://www.tiktok.com/tag/lingala",
+            "actif": true,
+            "description": "Vidéos TikTok avec le hashtag #lingala (yt-dlp supporte TikTok)"
+        },
+        {
+            "id": "tiktok_congolesetiktok_tag",
+            "type": "youtube",
+            "url": "https://www.tiktok.com/tag/congolesetiktok",
+            "actif": true,
+            "description": "Vidéos TikTok avec le hashtag #congolesetiktok"
+        },
+        {
+            "id": "radio_top_congo_stream",
             "type": "radio",
-            "url": "https://www.radiondekeluka.org",
+            "url": "https://topcongo.live/",
             "duree_secondes": 3600,
-            "actif": false,
-            "description": "Flux radio en direct (désactivé par défaut pour éviter les longs téléchargements en CI)"
+            "actif": true,
+            "description": "Flux radio en direct de Top Congo FM (1h par session)"
         }
     ],
     "kon": [
@@ -30,6 +79,34 @@
             "url": "https://www.youtube.com/hashtag/kikongo",
             "actif": true,
             "description": "Recherche par hashtag Kikongo sur YouTube"
+        },
+        {
+            "id": "youtube_kongo_kimbangu_tv",
+            "type": "youtube",
+            "url": "https://www.youtube.com/@CONGOKIMBANGUTVMAKESA",
+            "actif": true,
+            "description": "Chaîne YouTube Kongo Kimbangu TV (Prêches et culture en Kikongo)"
+        },
+        {
+            "id": "youtube_kimbanguiste_playlist",
+            "type": "youtube",
+            "url": "https://www.youtube.com/playlist?list=PLidNKU_0Vm0yUfmWf6aE0g201gjk1yx3u",
+            "actif": true,
+            "description": "Playlist YouTube de chants et prêches Kimbanguistes"
+        },
+        {
+            "id": "tiktok_kikongo_tag",
+            "type": "youtube",
+            "url": "https://www.tiktok.com/tag/kikongo",
+            "actif": true,
+            "description": "Vidéos TikTok avec le hashtag #kikongo"
+        },
+        {
+            "id": "tiktok_kicongo_tag",
+            "type": "youtube",
+            "url": "https://www.tiktok.com/tag/kicongo",
+            "actif": true,
+            "description": "Vidéos TikTok avec le hashtag #kicongo"
         }
     ],
     "sag": [
@@ -46,6 +123,35 @@
             "url": "https://www.youtube.com/channel/UCPE5MzAsoJDORgokqqdt4KA",
             "actif": true,
             "description": "Chaîne YouTube de Radio Guira (MINUSCA)"
+        },
+        {
+            "id": "youtube_sango_playlist",
+            "type": "youtube",
+            "url": "https://www.youtube.com/playlist?list=PLCqJ1M3aDa_FeBB5q6ZgDMECA9CNjsk-c",
+            "actif": true,
+            "description": "Playlist YouTube d'actualités en Sango"
+        },
+        {
+            "id": "tiktok_sango_tag",
+            "type": "youtube",
+            "url": "https://www.tiktok.com/tag/sango",
+            "actif": true,
+            "description": "Vidéos TikTok avec le hashtag #sango"
+        },
+        {
+            "id": "tiktok_centrafrique_tag",
+            "type": "youtube",
+            "url": "https://www.tiktok.com/tag/centrafrique",
+            "actif": true,
+            "description": "Vidéos TikTok avec le hashtag #centrafrique"
+        },
+        {
+            "id": "radio_ndeke_luka_stream",
+            "type": "radio",
+            "url": "https://zeno.fm/radio/radiondekeluka/",
+            "duree_secondes": 3600,
+            "actif": true,
+            "description": "Flux radio en direct de Radio Ndeke Luka (1h par session)"
         }
     ]
 }
