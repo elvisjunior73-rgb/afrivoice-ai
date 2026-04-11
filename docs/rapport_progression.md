@@ -1,6 +1,6 @@
 # Rapport de Progression — AfriVoice AI
 
-_Généré le 11/04/2026 à 07:07 UTC_
+_Généré le 11/04/2026 à 14:39 UTC_
 
 **Objectif global :** 20000 heures d'audio par langue
 
@@ -8,29 +8,28 @@ _Généré le 11/04/2026 à 07:07 UTC_
 
 | Langue | Heures collectées | Progression | Restant |
 |--------|-------------------|-------------|---------|
-| Lingala (lin) | 420.0h | `░░░░░░░░░░░░░░░░░░░░` 2.1% | 19580h |
-| Kikongo (kon) | 12.0h | `░░░░░░░░░░░░░░░░░░░░` 0.1% | 19988h |
-| Sango (sag) | 0.3h | `░░░░░░░░░░░░░░░░░░░░` 0.0% | 20000h |
+| Lingala (lin) | 0.0h | `░░░░░░░░░░░░░░░░░░░░` 0.0% | 20000h |
+| Kikongo (kon) | 0.0h | `░░░░░░░░░░░░░░░░░░░░` 0.0% | 20000h |
+| Sango (sag) | 0.0h | `░░░░░░░░░░░░░░░░░░░░` 0.0% | 20000h |
 
 ---
 
 ## Détail par langue
 
 ### Lingala (lin)
-- **Total collecté :** 420.00 heures (1512000 secondes)
-- **Collectes réussies :** 2
-- **Collectes échouées :** 0
-- **Dernière collecte :** 2026-04-11T02:00:00 — youtube_top_congo (succes)
+- **Total collecté :** 0.00 heures (0 secondes)
+- **Collectes réussies :** 9
+- **Collectes échouées :** 1
+- **Dernière collecte :** 2026-04-11T14:38:45.460194 — radio_top_congo_stream (echec)
 
 ### Kikongo (kon)
-- **Total collecté :** 12.00 heures (43200 secondes)
-- **Collectes réussies :** 1
+- **Total collecté :** 0.00 heures (0 secondes)
+- **Collectes réussies :** 5
 - **Collectes échouées :** 0
-- **Dernière collecte :** 2026-04-10T02:00:00 — youtube_kikongo_hashtag (succes)
+- **Dernière collecte :** 2026-04-11T14:39:18.575541 — tiktok_kicongo_tag (succes)
 
 ### Sango (sag)
-- **Total collecté :** 0.26 heures (923 secondes)
-- **Collectes réussies :** 1
-- **Collectes échouées :** 0
-- **Dernière collecte :** 2026-04-11T02:00:00 — youtube_ndeke_luka (succes)
-# Mise à jour: Sat Apr 11 12:35:56 UTC 2026
+- **Total collecté :** 0.00 heures (0 secondes)
+- **Collectes réussies :** 5
+- **Collectes échouées :** 1
+- **Dernière collecte :** 2026-04-11T14:39:25.885589 — radio_ndeke_luka_stream (echec)

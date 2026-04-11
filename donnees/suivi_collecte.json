@@ -1,5 +1,143 @@
 {
-    "lin": {"total_secondes": 0, "historique": []},
-    "kon": {"total_secondes": 0, "historique": []},
-    "sag": {"total_secondes": 0, "historique": []}
+    "lin": {
+        "total_secondes": 0,
+        "historique": [
+            {
+                "date": "2026-04-11T14:34:52.764020",
+                "source_id": "youtube_radio_okapi",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:36:14.458558",
+                "source_id": "youtube_top_congo",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:37:33.132375",
+                "source_id": "youtube_rtnc",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:38:20.017560",
+                "source_id": "youtube_antenne_a",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:38:21.114046",
+                "source_id": "youtube_congo_web_tv",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:38:40.284447",
+                "source_id": "youtube_lingala_news",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:38:42.920922",
+                "source_id": "youtube_congotalks243",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:38:43.728926",
+                "source_id": "tiktok_lingala_tag",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:38:43.991341",
+                "source_id": "tiktok_congolesetiktok_tag",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:38:45.460194",
+                "source_id": "radio_top_congo_stream",
+                "duree_secondes": 0,
+                "statut": "echec"
+            }
+        ]
+    },
+    "kon": {
+        "total_secondes": 0,
+        "historique": [
+            {
+                "date": "2026-04-11T14:38:56.056045",
+                "source_id": "youtube_kikongo_hashtag",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:39:17.121819",
+                "source_id": "youtube_kongo_kimbangu_tv",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:39:17.895387",
+                "source_id": "youtube_kimbanguiste_playlist",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:39:18.327316",
+                "source_id": "tiktok_kikongo_tag",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:39:18.575541",
+                "source_id": "tiktok_kicongo_tag",
+                "duree_secondes": 0,
+                "statut": "succes"
+            }
+        ]
+    },
+    "sag": {
+        "total_secondes": 0,
+        "historique": [
+            {
+                "date": "2026-04-11T14:39:21.152550",
+                "source_id": "youtube_ndeke_luka",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:39:23.704041",
+                "source_id": "youtube_radio_guira",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:39:24.353528",
+                "source_id": "youtube_sango_playlist",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:39:24.626641",
+                "source_id": "tiktok_sango_tag",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:39:24.867882",
+                "source_id": "tiktok_centrafrique_tag",
+                "duree_secondes": 0,
+                "statut": "succes"
+            },
+            {
+                "date": "2026-04-11T14:39:25.885589",
+                "source_id": "radio_ndeke_luka_stream",
+                "duree_secondes": 0,
+                "statut": "echec"
+            }
+        ]
+    }
 }
