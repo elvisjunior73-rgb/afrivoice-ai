@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mic, MicOff, Send, Check, Edit3, ArrowLeft, Loader2, Radio, BookOpen, Globe2, TrendingUp, Swords, Sparkles } from "lucide-react";
+import { Mic, MicOff, Send, Check, Edit3, ArrowLeft, Loader2, Radio, BookOpen, Globe2, TrendingUp, Swords, Sparkles, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
@@ -10,7 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Link, useSearchParams } from "react-router-dom";
 
 type Language = "lin" | "kon" | "sag";
-type Msg = { role: "user" | "assistant"; content: string };
+type Msg = { role: "user" | "assistant"; content: string; interactionId?: string };
 
 interface Topic {
   id: string;
@@ -35,6 +35,9 @@ const TOPICS: Topic[] = [
   { id: "proverbs", icon: "🧠", label: "Proverbes & sagesse", prompt: "Apprends-moi un proverbe ou une expression de sagesse. Explique sa signification et son contexte." },
   { id: "science", icon: "🔬", label: "Science & nature", prompt: "Parle-moi d'une découverte scientifique fascinante ou de la nature incroyable du bassin du Congo." },
 ];
+
+const TRANSCRIBE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/afrivoice-transcribe`;
+const TTS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/afrivoice-tts`;
 
 const CORRECTION_REACTIONS = [
   "Merci ! J'ai noté 🧠",
@@ -65,6 +68,8 @@ const VoiceChat = () => {
   const { streamChat } = useStreamChat();
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -156,12 +161,34 @@ const VoiceChat = () => {
     if (isRecording) {
       const blob = await stopRecording();
       if (blob) {
-        const simulatedText = `[Audio ${audioDuration.toFixed(1)}s — ${LANGUAGES[language!].name}]`;
-        await supabase.from("voice_interactions").insert({
-          session_id: sessionId, language: language!, audio_duration_seconds: audioDuration,
-          asr_text: simulatedText, confidence_score: 0.75,
-        });
-        await sendMessage(simulatedText);
+        // Send audio to afrivoice-transcribe
+        setIsLoading(true);
+        try {
+          const formData = new FormData();
+          formData.append("audio", blob, "recording.webm");
+          formData.append("language", language!);
+          formData.append("session_id", sessionId);
+
+          const resp = await fetch(TRANSCRIBE_URL, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            },
+            body: formData,
+          });
+
+          if (!resp.ok) {
+            const err = await resp.json().catch(() => ({}));
+            throw new Error(err.error || `Erreur transcription ${resp.status}`);
+          }
+
+          const result = await resp.json();
+          const transcribedText = result.text || `[Audio ${audioDuration.toFixed(1)}s]`;
+          await sendMessage(transcribedText);
+        } catch (e: any) {
+          setIsLoading(false);
+          toast({ title: "Erreur micro", description: e.message, variant: "destructive" });
+        }
       }
     } else {
       await startRecording();
@@ -173,6 +200,56 @@ const VoiceChat = () => {
     const text = textInput.trim();
     setTextInput("");
     await sendMessage(text);
+  };
+
+  const handlePlayTTS = async (text: string, index: number) => {
+    // Stop current playback
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    if (playingIndex === index) {
+      setPlayingIndex(null);
+      return;
+    }
+
+    setPlayingIndex(index);
+    try {
+      const resp = await fetch(TTS_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({ text, language }),
+      });
+
+      if (!resp.ok) {
+        const contentType = resp.headers.get("content-type") || "";
+        if (contentType.includes("application/json")) {
+          const err = await resp.json();
+          throw new Error(err.error || "TTS non disponible");
+        }
+        throw new Error(`Erreur TTS ${resp.status}`);
+      }
+
+      const audioBlob = await resp.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+      audioRef.current = audio;
+      audio.onended = () => {
+        setPlayingIndex(null);
+        URL.revokeObjectURL(audioUrl);
+      };
+      audio.onerror = () => {
+        setPlayingIndex(null);
+        URL.revokeObjectURL(audioUrl);
+      };
+      await audio.play();
+    } catch (e: any) {
+      setPlayingIndex(null);
+      toast({ title: "🔇 TTS", description: e.message || "Lecture non disponible", variant: "destructive" });
+    }
   };
 
   const handleSaveCorrection = async (index: number) => {
@@ -340,11 +417,18 @@ const VoiceChat = () => {
                   <div className="group relative">
                     <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
                     {msg.role === "assistant" && (
-                      <button onClick={() => { setEditingIndex(i); setEditText(msg.content); }}
-                        className="absolute -bottom-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity bg-background border border-border rounded-full p-1.5 shadow-sm"
-                        title="Corriger">
-                        <Edit3 className="w-3 h-3 text-muted-foreground" />
-                      </button>
+                      <div className="absolute -bottom-1 -right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onClick={() => handlePlayTTS(msg.content, i)}
+                          className="bg-background border border-border rounded-full p-1.5 shadow-sm"
+                          title="Écouter">
+                          {playingIndex === i ? <VolumeX className="w-3 h-3 text-primary" /> : <Volume2 className="w-3 h-3 text-muted-foreground" />}
+                        </button>
+                        <button onClick={() => { setEditingIndex(i); setEditText(msg.content); }}
+                          className="bg-background border border-border rounded-full p-1.5 shadow-sm"
+                          title="Corriger">
+                          <Edit3 className="w-3 h-3 text-muted-foreground" />
+                        </button>
+                      </div>
                     )}
                   </div>
                 )}
