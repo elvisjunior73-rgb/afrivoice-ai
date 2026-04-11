@@ -101,6 +101,25 @@ const HeroSection = () => {
             </motion.div>
           ))}
         </motion.div>
+
+        {/* Learn section */}
+        <motion.div
+          className="mt-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.7 }}
+        >
+          <Link to="/apprendre">
+            <div className="group inline-flex items-center gap-3 px-6 py-4 rounded-2xl border border-border bg-card/60 backdrop-blur-sm hover:border-primary/40 transition-all hover:shadow-lg cursor-pointer">
+              <Sparkles className="w-5 h-5 text-primary" />
+              <div className="text-left">
+                <p className="font-display font-bold text-foreground text-sm">🧒 Apprendre en jouant</p>
+                <p className="text-xs text-muted-foreground">Alphabet, nombres, animaux — pour les enfants de la diaspora</p>
+              </div>
+              <ArrowRight className="w-4 h-4 text-primary group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
