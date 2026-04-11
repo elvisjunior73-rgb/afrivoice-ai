@@ -41,6 +41,10 @@ const HeroSection = () => {
           <span className="text-foreground">Et si l'actualité mondiale</span><br />
           <span className="text-foreground">était racontée en </span>
           <span className="text-gradient-hero">Lingala</span>
+          <span className="text-foreground">, </span>
+          <span className="text-gradient-hero">Kikongo</span>
+          <span className="text-foreground">, </span>
+          <span className="text-gradient-hero">Sango</span>
           <span className="text-foreground"> ?</span>
         </motion.h1>
 
