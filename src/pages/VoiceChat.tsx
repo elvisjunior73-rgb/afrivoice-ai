@@ -45,7 +45,12 @@ const CORRECTION_REACTIONS = [
 ];
 
 const VoiceChat = () => {
-  const [language, setLanguage] = useState<Language | null>(null);
+  const [searchParams] = useSearchParams();
+  const langParam = searchParams.get("lang") as Language | null;
+  const validLangs: Language[] = ["lin", "kon", "sag"];
+  const initialLang = langParam && validLangs.includes(langParam) ? langParam : null;
+  
+  const [language, setLanguage] = useState<Language | null>(initialLang);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId] = useState(() => crypto.randomUUID());
