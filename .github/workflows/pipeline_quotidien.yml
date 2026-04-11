@@ -65,6 +65,17 @@ jobs:
     # est désormais géré par le cluster GPU RunPod.io en continu.
 
     # ─────────────────────────────────────────────
+    # 3. SYNCHRONISATION SUPABASE
+    # ─────────────────────────────────────────────
+    - name: Synchronisation des statistiques vers Supabase
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      run: |
+        python scripts/sync_supabase.py \
+          --suivi donnees/suivi_collecte.json
+
+    # ─────────────────────────────────────────────
     # 6. RAPPORT DE PROGRESSION
     # ─────────────────────────────────────────────
     - name: Génération du rapport de progression
