@@ -14,7 +14,149 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      collection_stats: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          language: string
+          source: string
+          total_corrections: number
+          total_seconds: number
+          total_segments: number
+        }
+        Insert: {
+          created_at?: string
+          date?: string
+          id?: string
+          language: string
+          source: string
+          total_corrections?: number
+          total_seconds?: number
+          total_segments?: number
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          language?: string
+          source?: string
+          total_corrections?: number
+          total_seconds?: number
+          total_segments?: number
+        }
+        Relationships: []
+      }
+      conversations: {
+        Row: {
+          audio_duration_seconds: number | null
+          content: string
+          created_at: string
+          id: string
+          language: string
+          role: string
+          session_id: string
+        }
+        Insert: {
+          audio_duration_seconds?: number | null
+          content: string
+          created_at?: string
+          id?: string
+          language?: string
+          role: string
+          session_id?: string
+        }
+        Update: {
+          audio_duration_seconds?: number | null
+          content?: string
+          created_at?: string
+          id?: string
+          language?: string
+          role?: string
+          session_id?: string
+        }
+        Relationships: []
+      }
+      gold_dataset: {
+        Row: {
+          audio_duration_seconds: number | null
+          corrected_text: string
+          created_at: string
+          id: string
+          interaction_id: string
+          language: string
+          original_text: string
+        }
+        Insert: {
+          audio_duration_seconds?: number | null
+          corrected_text: string
+          created_at?: string
+          id?: string
+          interaction_id: string
+          language: string
+          original_text: string
+        }
+        Update: {
+          audio_duration_seconds?: number | null
+          corrected_text?: string
+          created_at?: string
+          id?: string
+          interaction_id?: string
+          language?: string
+          original_text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gold_dataset_interaction_id_fkey"
+            columns: ["interaction_id"]
+            isOneToOne: false
+            referencedRelation: "voice_interactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      voice_interactions: {
+        Row: {
+          asr_text: string | null
+          audio_duration_seconds: number | null
+          confidence_score: number | null
+          corrected_text: string | null
+          created_at: string
+          id: string
+          is_corrected: boolean
+          is_validated: boolean
+          language: string
+          session_id: string
+          updated_at: string
+        }
+        Insert: {
+          asr_text?: string | null
+          audio_duration_seconds?: number | null
+          confidence_score?: number | null
+          corrected_text?: string | null
+          created_at?: string
+          id?: string
+          is_corrected?: boolean
+          is_validated?: boolean
+          language?: string
+          session_id?: string
+          updated_at?: string
+        }
+        Update: {
+          asr_text?: string | null
+          audio_duration_seconds?: number | null
+          confidence_score?: number | null
+          corrected_text?: string | null
+          created_at?: string
+          id?: string
+          is_corrected?: boolean
+          is_validated?: boolean
+          language?: string
+          session_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
