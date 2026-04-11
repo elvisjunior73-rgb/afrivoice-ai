@@ -25,7 +25,7 @@ const HeroSection = () => {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/5 mb-8">
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
-            <span className="text-sm font-body text-primary">Phase 1 — Collecte de données en cours</span>
+            <span className="text-sm font-body text-primary">En construction — Bientôt disponible</span>
           </div>
         </motion.div>
 
@@ -45,11 +45,10 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
         >
-          La première plateforme d'IA conversationnelle en{" "}
+          La première IA conversationnelle en{" "}
           <span className="text-primary font-medium">Lingala</span>,{" "}
           <span className="text-accent font-medium">Kikongo</span> et{" "}
-          <span className="text-secondary font-medium">Sango</span> — 
-          donnant une voix numérique à plus de 60 millions de locuteurs.
+          <span className="text-secondary font-medium">Sango</span>.
         </motion.p>
 
         <motion.div
@@ -59,7 +58,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.45 }}
         >
           <Link to="/chat">
-            <Button size="lg" className="gap-2 text-base font-display font-semibold rounded-full px-8 py-6 glow-primary mb-6">
+            <Button size="lg" className="gap-2 text-base font-display font-semibold rounded-full px-8 py-6 glow-primary">
               <MessageSquare className="w-5 h-5" />
               Essayer l'IA vocale
             </Button>
@@ -67,45 +66,22 @@ const HeroSection = () => {
         </motion.div>
 
         <motion.div
-          className="flex flex-wrap justify-center gap-4 mb-16"
+          className="flex flex-wrap justify-center gap-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
+          transition={{ duration: 0.8, delay: 0.55 }}
         >
           {[
-            { icon: Mic, label: "Reconnaissance vocale", desc: "ASR multilingue" },
-            { icon: Brain, label: "IA conversationnelle", desc: "Chatbot vocal & texte" },
-            { icon: Globe, label: "3 langues africaines", desc: "Lingala · Kikongo · Sango" },
-          ].map((item, i) => (
+            { icon: Mic, label: "Reconnaissance vocale" },
+            { icon: Brain, label: "IA conversationnelle" },
+            { icon: Globe, label: "3 langues africaines" },
+          ].map((item) => (
             <div
               key={item.label}
-              className="flex items-center gap-3 px-5 py-3 rounded-xl border border-border bg-card/50 backdrop-blur-sm"
+              className="flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-card/30 backdrop-blur-sm"
             >
-              <item.icon className="w-5 h-5 text-primary" />
-              <div className="text-left">
-                <div className="text-sm font-display font-semibold text-foreground">{item.label}</div>
-                <div className="text-xs text-muted-foreground">{item.desc}</div>
-              </div>
-            </div>
-          ))}
-        </motion.div>
-
-        {/* Stats */}
-        <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.6 }}
-        >
-          {[
-            { value: "60M+", label: "Locuteurs" },
-            { value: "20K", label: "Heures cibles" },
-            { value: "3", label: "Langues" },
-            { value: "4", label: "Pays" },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div className="font-display text-3xl md:text-4xl font-bold text-gradient-gold">{stat.value}</div>
-              <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
+              <item.icon className="w-4 h-4 text-primary" />
+              <span className="text-sm text-muted-foreground">{item.label}</span>
             </div>
           ))}
         </motion.div>
