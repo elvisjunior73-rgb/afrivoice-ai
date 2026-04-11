@@ -316,6 +316,7 @@ const LearnPage = () => {
 
   const TABS: { id: Tab; icon: React.ReactNode; label: string }[] = [
     { id: "vocab", icon: <BookOpen className="w-4 h-4" />, label: "Vocabulaire" },
+    { id: "quiz", icon: <Gamepad2 className="w-4 h-4" />, label: "Quiz" },
     { id: "chat", icon: <Mic className="w-4 h-4" />, label: "Parler" },
     { id: "news", icon: <Newspaper className="w-4 h-4" />, label: "Infos & Radio" },
   ];
