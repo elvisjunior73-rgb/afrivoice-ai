@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Volume2, Edit3, Check, X, Sparkles, Send, Loader2, Newspaper, Radio, MessageSquare, BookOpen, Mic, MicOff, Lightbulb } from "lucide-react";
+import { ArrowLeft, Volume2, Edit3, Check, X, Sparkles, Send, Loader2, Newspaper, Radio, MessageSquare, BookOpen, Mic, MicOff, Lightbulb, Gamepad2 } from "lucide-react";
+import QuizGame from "@/components/QuizGame";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
