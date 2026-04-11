@@ -1,0 +1,51 @@
+{
+    "lin": [
+        {
+            "id": "youtube_radio_okapi",
+            "type": "youtube",
+            "url": "https://www.youtube.com/@radio_okapi",
+            "actif": true,
+            "description": "Chaîne YouTube officielle de Radio Okapi (RDC)"
+        },
+        {
+            "id": "youtube_top_congo",
+            "type": "youtube",
+            "url": "https://www.youtube.com/@TOPCONGOFM",
+            "actif": true,
+            "description": "Chaîne YouTube officielle de Top Congo FM"
+        },
+        {
+            "id": "radio_okapi_stream",
+            "type": "radio",
+            "url": "https://www.radiondekeluka.org",
+            "duree_secondes": 3600,
+            "actif": false,
+            "description": "Flux radio en direct (désactivé par défaut pour éviter les longs téléchargements en CI)"
+        }
+    ],
+    "kon": [
+        {
+            "id": "youtube_kikongo_hashtag",
+            "type": "youtube",
+            "url": "https://www.youtube.com/hashtag/kikongo",
+            "actif": true,
+            "description": "Recherche par hashtag Kikongo sur YouTube"
+        }
+    ],
+    "sag": [
+        {
+            "id": "youtube_ndeke_luka",
+            "type": "youtube",
+            "url": "https://www.youtube.com/@radiondekeluka9232",
+            "actif": true,
+            "description": "Chaîne YouTube officielle de Radio Ndeke Luka (RCA)"
+        },
+        {
+            "id": "youtube_radio_guira",
+            "type": "youtube",
+            "url": "https://www.youtube.com/channel/UCPE5MzAsoJDORgokqqdt4KA",
+            "actif": true,
+            "description": "Chaîne YouTube de Radio Guira (MINUSCA)"
+        }
+    ]
+}

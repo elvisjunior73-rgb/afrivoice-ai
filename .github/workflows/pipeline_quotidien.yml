@@ -1,0 +1,183 @@
+name: Pipeline Quotidien AfriVoice AI
+
+# Déclenchement automatique chaque nuit à 02:00 UTC + déclenchement manuel possible
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  collecte_et_traitement:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360  # 6 heures max par exécution
+
+    steps:
+    # ─────────────────────────────────────────────
+    # 1. PRÉPARATION DE L'ENVIRONNEMENT
+    # ─────────────────────────────────────────────
+    - name: Checkout du code
+      uses: actions/checkout@v3
+
+    - name: Configuration de Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Installation des dépendances système
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -y ffmpeg streamlink
+
+    - name: Installation des dépendances Python
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # ─────────────────────────────────────────────
+    # 2. COLLECTE AUDIO MULTI-SOURCES
+    # ─────────────────────────────────────────────
+    - name: Collecte Audio Automatique (toutes langues)
+      run: |
+        python scripts/collecte_auto.py \
+          --catalogue configurations/sources.json \
+          --suivi donnees/suivi_collecte.json \
+          --output donnees/brutes
+
+    # ─────────────────────────────────────────────
+    # 3. PIPELINE DE TRAITEMENT — LINGALA (lin)
+    # ─────────────────────────────────────────────
+    - name: Traitement Lingala — Extraction Audio
+      run: |
+        [ -d "donnees/brutes/lin" ] && \
+        python scripts/extraire_audio.py --input donnees/brutes/lin --output donnees/audio_extrait/lin || true
+
+    - name: Traitement Lingala — Détection Langue
+      run: |
+        [ -d "donnees/audio_extrait/lin" ] && \
+        python scripts/detecter_langue.py --input donnees/audio_extrait/lin --lang lin --output donnees/langue_filtree/lin || true
+
+    - name: Traitement Lingala — Segmentation
+      run: |
+        [ -d "donnees/langue_filtree/lin" ] && \
+        python scripts/segment_audio.py --input donnees/langue_filtree/lin --output donnees/segments/lin || true
+
+    - name: Traitement Lingala — Transcription (Whisper base)
+      run: |
+        [ -d "donnees/segments/lin" ] && \
+        python scripts/transcrire_auto.py --input donnees/segments/lin --output donnees/transcriptions/lin --model base || true
+
+    - name: Traitement Lingala — Nettoyage & Déduplication
+      run: |
+        [ -d "donnees/transcriptions/lin" ] && \
+        python scripts/nettoyer_dedupliquer.py --input donnees/transcriptions/lin --output donnees/nettoyees/lin || true
+
+    - name: Traitement Lingala — Export Hugging Face
+      env:
+        HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      run: |
+        [ -f "donnees/nettoyees/lin/cleaned_dataset.jsonl" ] && \
+        python scripts/export_hf.py \
+          --input donnees/nettoyees/lin/cleaned_dataset.jsonl \
+          --dataset "MANIANGA/afrivoice-lin" \
+          --token $HF_TOKEN || true
+
+    # ─────────────────────────────────────────────
+    # 4. PIPELINE DE TRAITEMENT — KIKONGO (kon)
+    # ─────────────────────────────────────────────
+    - name: Traitement Kikongo — Extraction Audio
+      run: |
+        [ -d "donnees/brutes/kon" ] && \
+        python scripts/extraire_audio.py --input donnees/brutes/kon --output donnees/audio_extrait/kon || true
+
+    - name: Traitement Kikongo — Détection Langue
+      run: |
+        [ -d "donnees/audio_extrait/kon" ] && \
+        python scripts/detecter_langue.py --input donnees/audio_extrait/kon --lang kon --output donnees/langue_filtree/kon || true
+
+    - name: Traitement Kikongo — Segmentation
+      run: |
+        [ -d "donnees/langue_filtree/kon" ] && \
+        python scripts/segment_audio.py --input donnees/langue_filtree/kon --output donnees/segments/kon || true
+
+    - name: Traitement Kikongo — Transcription (Whisper base)
+      run: |
+        [ -d "donnees/segments/kon" ] && \
+        python scripts/transcrire_auto.py --input donnees/segments/kon --output donnees/transcriptions/kon --model base || true
+
+    - name: Traitement Kikongo — Nettoyage & Déduplication
+      run: |
+        [ -d "donnees/transcriptions/kon" ] && \
+        python scripts/nettoyer_dedupliquer.py --input donnees/transcriptions/kon --output donnees/nettoyees/kon || true
+
+    - name: Traitement Kikongo — Export Hugging Face
+      env:
+        HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      run: |
+        [ -f "donnees/nettoyees/kon/cleaned_dataset.jsonl" ] && \
+        python scripts/export_hf.py \
+          --input donnees/nettoyees/kon/cleaned_dataset.jsonl \
+          --dataset "MANIANGA/afrivoice-kon" \
+          --token $HF_TOKEN || true
+
+    # ─────────────────────────────────────────────
+    # 5. PIPELINE DE TRAITEMENT — SANGO (sag)
+    # ─────────────────────────────────────────────
+    - name: Traitement Sango — Extraction Audio
+      run: |
+        [ -d "donnees/brutes/sag" ] && \
+        python scripts/extraire_audio.py --input donnees/brutes/sag --output donnees/audio_extrait/sag || true
+
+    - name: Traitement Sango — Détection Langue
+      run: |
+        [ -d "donnees/audio_extrait/sag" ] && \
+        python scripts/detecter_langue.py --input donnees/audio_extrait/sag --lang sag --output donnees/langue_filtree/sag || true
+
+    - name: Traitement Sango — Segmentation
+      run: |
+        [ -d "donnees/langue_filtree/sag" ] && \
+        python scripts/segment_audio.py --input donnees/langue_filtree/sag --output donnees/segments/sag || true
+
+    - name: Traitement Sango — Transcription (Whisper base)
+      run: |
+        [ -d "donnees/segments/sag" ] && \
+        python scripts/transcrire_auto.py --input donnees/segments/sag --output donnees/transcriptions/sag --model base || true
+
+    - name: Traitement Sango — Nettoyage & Déduplication
+      run: |
+        [ -d "donnees/transcriptions/sag" ] && \
+        python scripts/nettoyer_dedupliquer.py --input donnees/transcriptions/sag --output donnees/nettoyees/sag || true
+
+    - name: Traitement Sango — Export Hugging Face
+      env:
+        HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      run: |
+        [ -f "donnees/nettoyees/sag/cleaned_dataset.jsonl" ] && \
+        python scripts/export_hf.py \
+          --input donnees/nettoyees/sag/cleaned_dataset.jsonl \
+          --dataset "MANIANGA/afrivoice-sag" \
+          --token $HF_TOKEN || true
+
+    # ─────────────────────────────────────────────
+    # 6. RAPPORT DE PROGRESSION
+    # ─────────────────────────────────────────────
+    - name: Génération du rapport de progression
+      run: |
+        python scripts/rapport_progression.py \
+          --suivi donnees/suivi_collecte.json \
+          --output docs/rapport_progression.md
+        cat docs/rapport_progression.md
+
+    - name: Commit du rapport de progression
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: "ci: mise à jour du rapport de progression [skip ci]"
+        file_pattern: "docs/rapport_progression.md donnees/suivi_collecte.json"
+
+    - name: Sauvegarde des artefacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: donnees-collectees-${{ github.run_id }}
+        path: |
+          donnees/suivi_collecte.json
+          docs/rapport_progression.md
+        retention-days: 30

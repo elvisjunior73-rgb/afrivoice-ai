@@ -1,0 +1,11 @@
+yt-dlp
+ffmpeg-python
+pydub
+librosa
+soundfile
+torch
+torchaudio
+openai-whisper
+datasets
+huggingface_hub
+streamlink
