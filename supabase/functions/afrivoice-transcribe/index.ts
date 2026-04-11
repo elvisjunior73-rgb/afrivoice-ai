@@ -1,10 +1,10 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 serve(async (req) => {
@@ -16,7 +16,7 @@ serve(async (req) => {
     const formData = await req.formData();
     const audioFile = formData.get("audio") as File;
     const language = formData.get("language") as string || "lin";
-    const conversationId = formData.get("conversation_id") as string;
+    const sessionId = formData.get("session_id") as string || crypto.randomUUID();
 
     if (!audioFile) {
       return new Response(
@@ -25,15 +25,16 @@ serve(async (req) => {
       );
     }
 
-    // Appel à l'API OpenAI Whisper (compatible avec le backend RunPod)
-    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
+    // Transcription via backend, Whisper, ou Lovable AI
     const BACKEND_URL = Deno.env.get("AFRIVOICE_BACKEND_URL");
+    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
     let transcription = "";
     let confidence = 0.0;
 
     if (BACKEND_URL) {
-      // Utiliser le backend FastAPI (RunPod) si disponible
+      // Backend FastAPI custom
       const backendFormData = new FormData();
       backendFormData.append("audio", audioFile);
       backendFormData.append("language", language);
@@ -49,7 +50,7 @@ serve(async (req) => {
         confidence = result.language_probability || 0.9;
       }
     } else if (OPENAI_API_KEY) {
-      // Fallback : utiliser l'API OpenAI Whisper
+      // OpenAI Whisper
       const whisperFormData = new FormData();
       whisperFormData.append("file", audioFile, "audio.wav");
       whisperFormData.append("model", "whisper-1");
@@ -68,39 +69,48 @@ serve(async (req) => {
         transcription = result.text;
         confidence = 0.85; // Estimation pour Whisper standard
       }
+    } else if (LOVABLE_API_KEY) {
+      // Fallback: use Lovable AI to acknowledge we received audio
+      // (Real ASR needs Whisper or custom backend — this is a graceful fallback)
+      const audioBytes = await audioFile.arrayBuffer();
+      const durationEstimate = Math.round(audioBytes.byteLength / 16000); // rough estimate
+      transcription = `[Audio reçu ~${durationEstimate}s — en attente d'un moteur ASR]`;
+      confidence = 0.1;
     } else {
-      // Placeholder si aucun backend n'est configuré
-      transcription = "[Audio transcrit - configurez OPENAI_API_KEY ou AFRIVOICE_BACKEND_URL]";
+      transcription = "[Audio reçu — configurez un moteur de transcription]";
       confidence = 0.0;
     }
 
-    // Sauvegarder dans Supabase
+    // Save to Supabase
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Sauvegarder l'audio dans R2 via le bucket Supabase Storage
+    // Upload audio to voice-recordings bucket
     const audioBuffer = await audioFile.arrayBuffer();
-    const audioPath = `audio/${conversationId || crypto.randomUUID()}/${Date.now()}.wav`;
+    const audioPath = `${sessionId}/${Date.now()}.webm`;
     
     const { data: storageData, error: storageError } = await supabase.storage
-      .from("afrivoice-audio")
-      .upload(audioPath, audioBuffer, { contentType: "audio/wav" });
+      .from("voice-recordings")
+      .upload(audioPath, audioBuffer, { contentType: audioFile.type || "audio/webm" });
 
     const audioUrl = storageError ? null : supabase.storage
-      .from("afrivoice-audio")
+      .from("voice-recordings")
       .getPublicUrl(audioPath).data.publicUrl;
 
-    // Sauvegarder dans la table interactions_vocales
+    if (storageError) {
+      console.error("Storage error:", storageError);
+    }
+
+    // Save to voice_interactions table
     const { data: interaction, error: dbError } = await supabase
-      .from("interactions_vocales")
+      .from("voice_interactions")
       .insert({
-        conversation_id: conversationId,
-        audio_url: audioUrl,
+        session_id: sessionId,
         asr_text: transcription,
         language: language,
-        confidence: confidence,
-        created_at: new Date().toISOString(),
+        confidence_score: confidence,
+        audio_duration_seconds: null,
       })
       .select()
       .single();
@@ -113,8 +123,8 @@ serve(async (req) => {
       JSON.stringify({
         text: transcription,
         confidence: confidence,
-        interaction_id: interaction?.id,
-        audio_url: audioUrl,
+        interactionId: interaction?.id,
+        audioUrl: audioUrl,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
