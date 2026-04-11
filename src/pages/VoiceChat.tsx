@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAudioRecorder } from "@/hooks/useAudioRecorder";
 import { useStreamChat } from "@/hooks/useStreamChat";
 import { supabase } from "@/integrations/supabase/client";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 type Language = "lin" | "kon" | "sag";
 type Msg = { role: "user" | "assistant"; content: string };
@@ -45,7 +45,12 @@ const CORRECTION_REACTIONS = [
 ];
 
 const VoiceChat = () => {
-  const [language, setLanguage] = useState<Language | null>(null);
+  const [searchParams] = useSearchParams();
+  const langParam = searchParams.get("lang") as Language | null;
+  const validLangs: Language[] = ["lin", "kon", "sag"];
+  const initialLang = langParam && validLangs.includes(langParam) ? langParam : null;
+  
+  const [language, setLanguage] = useState<Language | null>(initialLang);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId] = useState(() => crypto.randomUUID());

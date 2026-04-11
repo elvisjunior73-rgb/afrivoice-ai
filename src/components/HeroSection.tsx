@@ -4,11 +4,10 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
 
-const TOPICS = [
-  { icon: "📻", label: "Actualités du jour" },
-  { icon: "📖", label: "Contes africains" },
-  { icon: "🌍", label: "Histoire mondiale" },
-  { icon: "💰", label: "Économie & défis" },
+const LANGUAGES = [
+  { code: "lin", name: "Lingala", flag: "🇨🇩", accent: "primary" },
+  { code: "kon", name: "Kikongo", flag: "🇦🇴", accent: "accent" },
+  { code: "sag", name: "Sango", flag: "🇨🇫", accent: "secondary" },
 ];
 
 const HeroSection = () => {
@@ -66,38 +65,37 @@ const HeroSection = () => {
           Elle fait des erreurs. Corrige-la. Tu l'aides à devenir meilleure.
         </motion.p>
 
-        {/* Topic pills */}
+        {/* Language cards */}
         <motion.div
-          className="flex flex-wrap justify-center gap-3 mb-10"
-          initial={{ opacity: 0, y: 15 }}
+          className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.45 }}
         >
-          {TOPICS.map((t) => (
-            <div
-              key={t.label}
-              className="flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-card/40 backdrop-blur-sm"
+          {LANGUAGES.map((lang, i) => (
+            <motion.div
+              key={lang.code}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 + i * 0.1 }}
             >
-              <span className="text-base">{t.icon}</span>
-              <span className="text-sm text-muted-foreground">{t.label}</span>
-            </div>
+              <Link to={`/chat?lang=${lang.code}`}>
+                <div className="group relative overflow-hidden rounded-2xl border border-border bg-card/60 backdrop-blur-sm p-6 hover:border-primary/40 transition-all hover:shadow-lg hover:shadow-primary/5 cursor-pointer">
+                  <span className="text-4xl block mb-3">{lang.flag}</span>
+                  <h3 className="font-display text-lg font-bold text-foreground mb-1">
+                    {lang.name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Écouter & corriger
+                  </p>
+                  <div className="flex items-center gap-2 text-primary text-sm font-medium group-hover:gap-3 transition-all">
+                    <span>Lancer</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
           ))}
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-        >
-          <Link to="/chat">
-            <Button
-              size="lg"
-              className="gap-3 text-lg font-display font-semibold rounded-full px-10 py-7 glow-primary hover-scale"
-            >
-              Écouter & corriger
-              <ArrowRight className="w-5 h-5" />
-            </Button>
-          </Link>
         </motion.div>
       </div>
     </section>
