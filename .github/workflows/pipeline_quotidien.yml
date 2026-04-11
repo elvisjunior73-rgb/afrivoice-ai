@@ -6,6 +6,9 @@ on:
     - cron: '0 * * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   collecte_et_traitement:
     runs-on: ubuntu-latest
