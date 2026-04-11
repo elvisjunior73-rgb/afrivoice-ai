@@ -4,11 +4,10 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
 
-const TOPICS = [
-  { icon: "📻", label: "Actualités du jour" },
-  { icon: "📖", label: "Contes africains" },
-  { icon: "🌍", label: "Histoire mondiale" },
-  { icon: "💰", label: "Économie & défis" },
+const LANGUAGES = [
+  { code: "lin", name: "Lingala", flag: "🇨🇩", accent: "primary" },
+  { code: "kon", name: "Kikongo", flag: "🇦🇴", accent: "accent" },
+  { code: "sag", name: "Sango", flag: "🇨🇫", accent: "secondary" },
 ];
 
 const HeroSection = () => {
