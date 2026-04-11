@@ -568,6 +568,13 @@ const LearnPage = () => {
         </div>
       )}
 
+      {/* ═══ TAB: QUIZ ═══ */}
+      {activeTab === "quiz" && (
+        <div className="container mx-auto px-4 pb-8 max-w-3xl flex-1">
+          <QuizGame lang={lang} />
+        </div>
+      )}
+
       {/* ═══ TAB: INFOS & RADIO ═══ */}
       {activeTab === "news" && (
         <div className="container mx-auto px-4 pb-8 max-w-3xl flex-1">
