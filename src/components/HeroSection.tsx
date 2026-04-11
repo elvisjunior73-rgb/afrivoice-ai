@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
-import { Mic, Globe, Brain } from "lucide-react";
+import { Mic, Globe, Brain, MessageSquare } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const HeroSection = () => {
@@ -55,6 +57,20 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.45 }}
+        >
+          <Link to="/chat">
+            <Button size="lg" className="gap-2 text-base font-display font-semibold rounded-full px-8 py-6 glow-primary mb-6">
+              <MessageSquare className="w-5 h-5" />
+              Essayer l'IA vocale
+            </Button>
+          </Link>
+        </motion.div>
+
+        <motion.div
+          className="flex flex-wrap justify-center gap-4 mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
         >
           {[
             { icon: Mic, label: "Reconnaissance vocale", desc: "ASR multilingue" },
