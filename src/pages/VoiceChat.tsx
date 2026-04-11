@@ -417,16 +417,21 @@ const VoiceChat = () => {
                   <div className="group relative">
                     <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
                     {msg.role === "assistant" && (
-                      <div className="absolute -bottom-1 -right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border/50">
                         <button onClick={() => handlePlayTTS(msg.content, i)}
-                          className="bg-background border border-border rounded-full p-1.5 shadow-sm"
-                          title="Écouter">
-                          {playingIndex === i ? <VolumeX className="w-3 h-3 text-primary" /> : <Volume2 className="w-3 h-3 text-muted-foreground" />}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                            playingIndex === i
+                              ? "bg-primary/10 text-primary border border-primary/30"
+                              : "bg-muted/50 text-muted-foreground hover:bg-primary/10 hover:text-primary border border-border"
+                          }`}
+                          title="Écouter en langue">
+                          {playingIndex === i ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                          {playingIndex === i ? "Arrêter" : `🔊 Écouter`}
                         </button>
                         <button onClick={() => { setEditingIndex(i); setEditText(msg.content); }}
-                          className="bg-background border border-border rounded-full p-1.5 shadow-sm"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-muted/50 text-muted-foreground hover:bg-accent hover:text-accent-foreground border border-border transition-all"
                           title="Corriger">
-                          <Edit3 className="w-3 h-3 text-muted-foreground" />
+                          <Edit3 className="w-3.5 h-3.5" /> Corriger
                         </button>
                       </div>
                     )}
