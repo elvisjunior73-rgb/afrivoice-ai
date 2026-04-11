@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Volume2, Edit3, Check, X, Sparkles, Send, Loader2, Newspaper, Radio, MessageSquare, BookOpen, Mic, MicOff, Lightbulb } from "lucide-react";
+import { ArrowLeft, Volume2, Edit3, Check, X, Sparkles, Send, Loader2, Newspaper, Radio, MessageSquare, BookOpen, Mic, MicOff, Lightbulb, Gamepad2 } from "lucide-react";
+import QuizGame from "@/components/QuizGame";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +22,7 @@ const TTS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/afrivoice-tts
 const NEWS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/afrivoice-news`;
 const TRANSCRIBE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/afrivoice-transcribe`;
 
-type Tab = "vocab" | "chat" | "news";
+type Tab = "vocab" | "chat" | "news" | "quiz";
 type ChatMsg = { role: "user" | "assistant"; content: string; transcription?: string };
 type NewsItem = { title: string; description: string; link: string; source: string };
 
@@ -315,6 +316,7 @@ const LearnPage = () => {
 
   const TABS: { id: Tab; icon: React.ReactNode; label: string }[] = [
     { id: "vocab", icon: <BookOpen className="w-4 h-4" />, label: "Vocabulaire" },
+    { id: "quiz", icon: <Gamepad2 className="w-4 h-4" />, label: "Quiz" },
     { id: "chat", icon: <Mic className="w-4 h-4" />, label: "Parler" },
     { id: "news", icon: <Newspaper className="w-4 h-4" />, label: "Infos & Radio" },
   ];
@@ -563,6 +565,13 @@ const LearnPage = () => {
               📱 <span className="font-medium text-foreground">Bientôt sur WhatsApp</span> — Contribue directement par message vocal WhatsApp. Reste connecté !
             </p>
           </div>
+        </div>
+      )}
+
+      {/* ═══ TAB: QUIZ ═══ */}
+      {activeTab === "quiz" && (
+        <div className="container mx-auto px-4 pb-8 max-w-3xl flex-1">
+          <QuizGame lang={lang} />
         </div>
       )}
 
