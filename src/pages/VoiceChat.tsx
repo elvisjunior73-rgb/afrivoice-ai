@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAudioRecorder } from "@/hooks/useAudioRecorder";
 import { useStreamChat } from "@/hooks/useStreamChat";
 import { supabase } from "@/integrations/supabase/client";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/integrations/supabase/constants";
 import { Link, useSearchParams } from "react-router-dom";
 
 type Language = "lin" | "kon" | "sag";
@@ -36,8 +37,8 @@ const TOPICS: Topic[] = [
   { id: "science", icon: "🔬", label: "Science & nature", prompt: "Parle-moi d'une découverte scientifique fascinante ou de la nature incroyable du bassin du Congo." },
 ];
 
-const TRANSCRIBE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/afrivoice-transcribe`;
-const TTS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/afrivoice-tts`;
+const TRANSCRIBE_URL = `${SUPABASE_URL}/functions/v1/afrivoice-transcribe`;
+const TTS_URL = `${SUPABASE_URL}/functions/v1/afrivoice-tts`;
 
 const CORRECTION_REACTIONS = [
   "Merci ! J'ai noté 🧠",
@@ -172,7 +173,7 @@ const VoiceChat = () => {
           const resp = await fetch(TRANSCRIBE_URL, {
             method: "POST",
             headers: {
-              Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
             },
             body: formData,
           });
@@ -235,7 +236,7 @@ const VoiceChat = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
         },
         body: JSON.stringify({ text, language }),
       });

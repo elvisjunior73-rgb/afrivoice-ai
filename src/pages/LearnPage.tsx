@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useStreamChat } from "@/hooks/useStreamChat";
 import { useAudioRecorder } from "@/hooks/useAudioRecorder";
 import { supabase } from "@/integrations/supabase/client";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/integrations/supabase/constants";
 import {
   type Language,
   type LearnItem,
@@ -18,9 +19,9 @@ import {
   CATEGORIES,
 } from "@/data/learnData";
 
-const TTS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/afrivoice-tts`;
-const NEWS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/afrivoice-news`;
-const TRANSCRIBE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/afrivoice-transcribe`;
+const TTS_URL = `${SUPABASE_URL}/functions/v1/afrivoice-tts`;
+const NEWS_URL = `${SUPABASE_URL}/functions/v1/afrivoice-news`;
+const TRANSCRIBE_URL = `${SUPABASE_URL}/functions/v1/afrivoice-transcribe`;
 
 type Tab = "vocab" | "chat" | "news" | "quiz";
 type ChatMsg = { role: "user" | "assistant"; content: string; transcription?: string };
@@ -94,7 +95,7 @@ const LearnPage = () => {
     try {
       const resp = await fetch(TTS_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}` },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
         body: JSON.stringify({ text, language: lang }),
       });
       if (resp.ok && resp.headers.get("content-type")?.includes("audio")) {
@@ -125,7 +126,7 @@ const LearnPage = () => {
     try {
       const resp = await fetch(TTS_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}` },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
         body: JSON.stringify({ text: text.slice(0, 500), language: lang }),
       });
       if (resp.ok && resp.headers.get("content-type")?.includes("audio")) {
@@ -224,7 +225,7 @@ const LearnPage = () => {
         formData.append("session_id", sessionId);
         const resp = await fetch(TRANSCRIBE_URL, {
           method: "POST",
-          headers: { Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}` },
+          headers: { Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
           body: formData,
         });
         if (!resp.ok) {
@@ -271,7 +272,7 @@ const LearnPage = () => {
     try {
       const resp = await fetch(NEWS_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}` },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
         body: JSON.stringify({ language: lang, mode: "headlines" }),
       });
       if (resp.ok) { const data = await resp.json(); setNewsItems(data.items || []); }
@@ -285,7 +286,7 @@ const LearnPage = () => {
     try {
       const resp = await fetch(NEWS_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}` },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
         body: JSON.stringify({ language: lang, mode: "radio" }),
       });
       if (!resp.ok || !resp.body) throw new Error("Erreur radio");

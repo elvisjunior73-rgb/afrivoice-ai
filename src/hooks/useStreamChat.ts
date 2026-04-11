@@ -1,6 +1,7 @@
 import { useCallback } from "react";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/integrations/supabase/constants";
 
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/afrivoice-chat`;
+const CHAT_URL = `${SUPABASE_URL}/functions/v1/afrivoice-chat`;
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -21,7 +22,7 @@ export function useStreamChat() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
         },
         body: JSON.stringify({ messages, language }),
       });
