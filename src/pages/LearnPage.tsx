@@ -22,7 +22,7 @@ const TTS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/afrivoice-tts
 const NEWS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/afrivoice-news`;
 const TRANSCRIBE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/afrivoice-transcribe`;
 
-type Tab = "vocab" | "chat" | "news";
+type Tab = "vocab" | "chat" | "news" | "quiz";
 type ChatMsg = { role: "user" | "assistant"; content: string; transcription?: string };
 type NewsItem = { title: string; description: string; link: string; source: string };
 
