@@ -202,12 +202,28 @@ const VoiceChat = () => {
     await sendMessage(text);
   };
 
+  const speakWithBrowser = (text: string, lang: string, index: number) => {
+    if (!('speechSynthesis' in window)) {
+      toast({ title: "🔇", description: "Synthèse vocale non supportée par ce navigateur", variant: "destructive" });
+      setPlayingIndex(null);
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang === "lin" ? "fr-CD" : lang === "kon" ? "fr-CG" : "fr";
+    utterance.rate = 0.95;
+    utterance.onend = () => setPlayingIndex(null);
+    utterance.onerror = () => setPlayingIndex(null);
+    window.speechSynthesis.speak(utterance);
+  };
+
   const handlePlayTTS = async (text: string, index: number) => {
     // Stop current playback
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current = null;
     }
+    window.speechSynthesis?.cancel();
     if (playingIndex === index) {
       setPlayingIndex(null);
       return;
@@ -225,12 +241,16 @@ const VoiceChat = () => {
       });
 
       if (!resp.ok) {
-        const contentType = resp.headers.get("content-type") || "";
-        if (contentType.includes("application/json")) {
-          const err = await resp.json();
-          throw new Error(err.error || "TTS non disponible");
-        }
-        throw new Error(`Erreur TTS ${resp.status}`);
+        // Fallback to browser speech synthesis
+        speakWithBrowser(text, language!, index);
+        return;
+      }
+
+      const contentType = resp.headers.get("content-type") || "";
+      if (contentType.includes("application/json")) {
+        // Server returned JSON = no audio, use browser fallback
+        speakWithBrowser(text, language!, index);
+        return;
       }
 
       const audioBlob = await resp.blob();
@@ -244,11 +264,13 @@ const VoiceChat = () => {
       audio.onerror = () => {
         setPlayingIndex(null);
         URL.revokeObjectURL(audioUrl);
+        // Fallback if audio fails to play
+        speakWithBrowser(text, language!, index);
       };
       await audio.play();
     } catch (e: any) {
-      setPlayingIndex(null);
-      toast({ title: "🔇 TTS", description: e.message || "Lecture non disponible", variant: "destructive" });
+      // Fallback to browser TTS
+      speakWithBrowser(text, language!, index);
     }
   };
 
