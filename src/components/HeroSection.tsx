@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
-import { Mic, Globe, Brain } from "lucide-react";
+import { Mic, Globe, Brain, MessageSquare } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const HeroSection = () => {
