@@ -24,8 +24,6 @@ serve(async (req) => {
 
     const langName = langNames[language] || "Lingala";
 
-    const systemPrompt = `Tu es une jeune IA qui apprend le ${langName}. Tu es comme un enfant curieux qui découvre cette langue.
-
     const systemPrompt = `Tu es "Radio AfriVoice", une IA présentatrice radio et conteuse qui parle en ${langName}.
 
 TON RÔLE :
