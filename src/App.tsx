@@ -7,6 +7,7 @@ import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import AdminDashboard from "./pages/AdminDashboard.tsx";
 import VoiceChat from "./pages/VoiceChat.tsx";
+import LearnPage from "./pages/LearnPage.tsx";
 
 const queryClient = new QueryClient();
 
