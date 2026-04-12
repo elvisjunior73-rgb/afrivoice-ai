@@ -131,11 +131,32 @@ def collecter_youtube(url: str, langue: str, output_dir: str) -> tuple[bool, flo
         'match_filter': filtre_duree,
         # Évite de re-télécharger des fichiers déjà présents
         'nooverwrites': True,
-        # Utiliser Node.js comme runtime JS pour décoder les URLs YouTube
-        'extractor_args': {'youtube': {'player_client': ['web', 'android']}},
+        # ── Anti-bot : client Android en priorité (contourne les blocages YouTube)
+        # Le client Android ne nécessite pas de cookies ni de JavaScript.
+        # Ordre : android_vr (le plus permissif) → android → web comme fallback.
+        'extractor_args': {
+            'youtube': {
+                'player_client': ['android_vr', 'android', 'web'],
+                'player_skip': ['webpage', 'configs'],
+            }
+        },
+        # User-agent Android pour cohérence avec le client android_vr
+        'http_headers': {
+            'User-Agent': (
+                'com.google.android.apps.youtube.vr.oculus/1.56.21 '
+                '(Linux; Android 12; Build/SQ3A.220705.003.A1) '
+                'gzip'
+            ),
+        },
+        # Délai aléatoire entre les téléchargements (réduit les blocages)
+        'sleep_interval': 2,
+        'max_sleep_interval': 5,
+        # Nombre de tentatives en cas d'erreur réseau
+        'retries': 3,
+        'fragment_retries': 3,
     }
 
-    # Ajouter les cookies YouTube si disponibles (contournement anti-bot)
+    # Ajouter les cookies YouTube si disponibles (contournement anti-bot renforcé)
     cookies_file = os.environ.get('YOUTUBE_COOKIES_FILE', '')
     if cookies_file and os.path.exists(cookies_file):
         ydl_opts['cookiefile'] = cookies_file
