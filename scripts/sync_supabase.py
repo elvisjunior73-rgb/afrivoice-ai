@@ -35,13 +35,13 @@ SUPABASE_ANON_KEY = os.environ.get(
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imloc3lseHh1YWtwcWNpeXdlaWVkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MzU0NDYsImV4cCI6MjA5MTQxMTQ0Nn0.2zdGhYVN05Qj6n86cB8W1JxS_diOzM5AmDt1anLjjIo"
 )
 TABLE = "statistiques_collection"
-ENDPOINT = f"{SUPABASE_URL}/rest/v1/{TABLE}"
+ENDPOINT = f"{SUPABASE_URL}/rest/v1/{TABLE}?on_conflict=date,langue,source"
 
 HEADERS = {
     "apikey": SUPABASE_ANON_KEY,
     "Authorization": f"Bearer {SUPABASE_ANON_KEY}",
     "Content-Type": "application/json",
-    "Prefer": "resolution=merge-duplicates,return=minimal",
+    "Prefer": "resolution=merge-duplicates",
 }
 
 
