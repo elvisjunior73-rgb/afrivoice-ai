@@ -76,11 +76,26 @@ jobs:
           --output donnees/brutes \
           --s3-upload
 
-    # Le traitement (extraction, segmentation, transcription, export) 
-    # est désormais géré par le cluster GPU RunPod.io en continu.
+    # ─────────────────────────────────────────────
+    # 3. TRANSCRIPTION WHISPER (remplace RunPod)
+    # ─────────────────────────────────────────────
+    - name: Transcription audio avec Whisper
+      run: |
+        # Vérifie si des fichiers audio ont été collectés
+        if [ -d "donnees/brutes" ] && [ "$(find donnees/brutes -name '*.wav' -o -name '*.mp3' 2>/dev/null | head -1)" ]; then
+          echo "Fichiers audio détectés — lancement de la transcription Whisper..."
+          python scripts/transcription_whisper.py \
+            --input donnees/brutes \
+            --output donnees/transcriptions \
+            --suivi donnees/suivi_collecte.json \
+            --modele small \
+            --max-fichiers 30
+        else
+          echo "Aucun fichier audio à transcrire — étape ignorée."
+        fi
 
     # ─────────────────────────────────────────────
-    # 3. SYNCHRONISATION SUPABASE
+    # 4. SYNCHRONISATION SUPABASE
     # ─────────────────────────────────────────────
     - name: Synchronisation des statistiques vers Supabase
       env:
@@ -104,7 +119,7 @@ jobs:
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
         commit_message: "ci: mise à jour du rapport de progression [skip ci]"
-        file_pattern: "docs/rapport_progression.md donnees/suivi_collecte.json"
+        file_pattern: "docs/rapport_progression.md donnees/suivi_collecte.json donnees/transcriptions/"
 
     - name: Sauvegarde des artefacts
       uses: actions/upload-artifact@v4
@@ -113,4 +128,5 @@ jobs:
         path: |
           donnees/suivi_collecte.json
           docs/rapport_progression.md
+          donnees/transcriptions/
         retention-days: 30
